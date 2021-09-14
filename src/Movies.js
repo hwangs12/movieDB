@@ -22,7 +22,10 @@ const Movies = () => {
 						className="movie"
 						to={`/movies/${imdbID}`}
 					>
-						<img src={Poster || url} alt={Title} />
+						<img
+							src={(Poster === "N/A" && url) || Poster}
+							alt={Title}
+						/>
 						<div className="movie-info">
 							<h4 className="title">{Title}</h4>
 							<p>{Year}</p>

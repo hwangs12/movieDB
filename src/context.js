@@ -1,20 +1,38 @@
 import React, { useState, useContext, useEffect } from "react";
 // make sure to use https
-export const API_ENDPOINT = `https://www.omdbapi.com/?apikey=9f9080a7&s=batman`;
+export const API_ENDPOINT = `https://www.omdbapi.com/?apikey=${process.env.REACT_APP_MOVIE_DB_APIKEY}`;
+
 const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
 	const [loading, setLoading] = useState(true);
 	const [movies, setMovies] = useState([]);
+	const [title, setTitle] = useState("batman");
+	const [message, setMessage] = useState("");
+
+	const handleChange = (e) => {
+		if (!e.target.value) {
+			setTitle("batman");
+		}
+		setTitle(e.target.value);
+	};
 
 	const getMovies = async () => {
+		const searchTitle = `&s=${title}`;
+		const url = `${API_ENDPOINT}${searchTitle}`;
+		console.log(url);
 		setLoading(true);
 		try {
-			const response = await fetch(API_ENDPOINT);
+			const response = await fetch(`${url}`);
 			const data = await response.json();
-			console.log(data["Search"]);
-			setMovies(data["Search"]);
-			setLoading(false);
+			if (data["Search"]) {
+				setMessage("");
+				setMovies(data["Search"]);
+				setLoading(false);
+			} else {
+				setMessage(data["Error"]);
+				setLoading(false);
+			}
 		} catch (error) {
 			console.log(error);
 			setLoading(false);
@@ -23,10 +41,12 @@ const AppProvider = ({ children }) => {
 
 	useEffect(() => {
 		getMovies();
-	}, []);
+	}, [title]);
 
 	return (
-		<AppContext.Provider value={{ movies, loading }}>
+		<AppContext.Provider
+			value={{ movies, loading, title, message, handleChange }}
+		>
 			{children}
 		</AppContext.Provider>
 	);
