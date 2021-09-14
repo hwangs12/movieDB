@@ -14,13 +14,13 @@ const Movies = () => {
 	}
 	return (
 		<section className="movies">
-			{movies.map((movie) => {
-				const { Title, Year, Poster, imdbID } = movie;
+			{movies.map((movie, _index) => {
+				const { Title, Year, Poster, imdbID: id } = movie;
 				return (
 					<Link
-						key={imdbID}
+						key={`${id}${_index}`}
 						className="movie"
-						to={`/movies/${imdbID}`}
+						to={`/movies/${id}`}
 					>
 						<img
 							src={(Poster === "N/A" && url) || Poster}
