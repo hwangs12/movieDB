@@ -11,16 +11,10 @@ const AppProvider = ({ children }) => {
 	const [message, setMessage] = useState("");
 
 	const handleChange = (e) => {
-		if (!e.target.value) {
-			setTitle("batman");
-		}
 		setTitle(e.target.value);
 	};
 
-	const getMovies = async () => {
-		const searchTitle = `&s=${title}`;
-		const url = `${API_ENDPOINT}${searchTitle}`;
-		console.log(url);
+	const getMovies = async (url) => {
 		setLoading(true);
 		try {
 			const response = await fetch(`${url}`);
@@ -40,7 +34,7 @@ const AppProvider = ({ children }) => {
 	};
 
 	useEffect(() => {
-		getMovies();
+		getMovies(`${API_ENDPOINT}&s=${title}`);
 	}, [title]);
 
 	return (
