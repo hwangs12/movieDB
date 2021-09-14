@@ -7,14 +7,14 @@ const url =
 	"https://upload.wikimedia.org/wikipedia/commons/f/fc/No_picture_available.png";
 
 const Movies = () => {
-	const { loading, movies } = useGlobalContext();
+	const { loading, data } = useGlobalContext();
 
 	if (loading) {
 		return <div className="loading"></div>;
 	}
 	return (
 		<section className="movies">
-			{movies.map((movie, _index) => {
+			{data.map((movie, _index) => {
 				const { Title, Year, Poster, imdbID: id } = movie;
 				return (
 					<Link
